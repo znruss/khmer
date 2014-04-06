@@ -145,7 +145,9 @@ def get_parser():
     multifile runs; if :option:`-s` is set, the specified name will be used,
     and if not, the name `backup.ct` will be used.
     :option:`-l`/:option:`--loadtable` will load the specified k-mer counting
-    table before processsing the specified files.
+    table before processsing the specified files.  Note that these tables are
+    are in the same format as those produced by ``load-into-counting.py`` and
+    consumed by ``abundance-dist.py``.
 
     :option:`-f`/:option:`--fault-tolerant` will force the program to continue
     upon encountering a formatting error in a sequence file; the k-mer counting
