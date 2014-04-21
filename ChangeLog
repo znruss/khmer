@@ -1,3 +1,8 @@
+2014-04-21  Titus Brown  <t@idyll.org
+
+    * scripts/normalize-by-median.py: updated FP rate to match latest info from
+      Qingpeng's paper; corrected spelling error.
+
 2014-04-17  Ram RS  <ramrs@nyu.edu>
 
     * scripts/make-initial-stoptags.py: fixed bug that threw error on
