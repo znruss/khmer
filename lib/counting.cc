@@ -670,7 +670,9 @@ CountingHashFileWriter::CountingHashFileWriter(const std::string &outfilename, c
     unsigned int save_ksize = ht._ksize;
     unsigned char save_n_tables = ht._n_tables;
     unsigned long long save_tablesize;
-
+    unsigned long long writelimit=0x7FF00000;
+    unsigned long long written = 0;
+    unsigned long long writeout = 0;
     ofstream outfile(outfilename.c_str(), ios::binary);
 
     unsigned char version = SAVED_FORMAT_VERSION;
@@ -687,12 +689,19 @@ CountingHashFileWriter::CountingHashFileWriter(const std::string &outfilename, c
 
     outfile.write((const char *) &save_ksize, sizeof(save_ksize));
     outfile.write((const char *) &save_n_tables, sizeof(save_n_tables));
-
+    
     for (unsigned int i = 0; i < save_n_tables; i++) {
         save_tablesize = ht._tablesizes[i];
-
         outfile.write((const char *) &save_tablesize, sizeof(save_tablesize));
-        outfile.write((const char *) ht._counts[i], save_tablesize);
+        written = 0;
+        while (written != save_tablesize) {
+                writeout = min((save_tablesize - written),writeprotect);
+            outfile.write((const char *) ht._counts[i]+written,writeout);
+            written += writeout;
+        }
+if (outfile.fail()) {
+perror("Hash file writing failure:");
+}
     }
 
     HashIntoType n_counts = ht._bigcounts.size();
